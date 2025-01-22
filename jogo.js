@@ -3,9 +3,7 @@ sprites.src = './sprites.png';
 
 const canvas = document.querySelector('#game-canvas');
 const contexto = canvas.getContext('2d');
-
 contexto.fillStyle = '#70c5ce';
-contexto.fillRect(0,0, canvas.clientWidth, canvas.height)
 
 const flappyBird = {
     spriteX: 0,
@@ -28,17 +26,19 @@ const flappyBird = {
         atualiza(){
             flappyBird.velocidade += flappyBird.gravidade;
             flappyBird.y = flappyBird.y + flappyBird.velocidade;
+            flappyBird.x += 8
         }
 }
 
 const fundo = {
-    spriteX: 391,
+    spriteX: 390,
     spriteY: 0,
-    largura: 280,
-    altura: 202,
-    x: 665,
-    y: 204,
+    largura: 275,
+    altura: 204,
+    x: 0,
+    y: 280,
         desenha(){
+            contexto.fillRect(0,0, canvas.clientWidth, canvas.height)
             contexto.drawImage(
                 sprites,
                 fundo.spriteX, fundo.spriteY, 
@@ -46,10 +46,40 @@ const fundo = {
                 fundo.x, fundo.y,
                 fundo.largura, fundo.altura,
             );
+            contexto.drawImage(
+                sprites,
+                fundo.spriteX, fundo.spriteY, 
+                fundo.largura, fundo.altura,
+                fundo.x+fundo.largura, fundo.y,
+                fundo.largura, fundo.altura,
+            );
         }
 }
 
-
+const chao = {
+    spriteX: 0,
+    spriteY: 610,
+    largura: 223,
+    altura: 111,
+    x: 0,
+    y: 370,
+        desenha(){
+            contexto.drawImage(
+                sprites,
+                chao.spriteX, chao.spriteY, 
+                chao.largura, chao.altura,
+                chao.x, chao.y,
+                chao.largura, chao.altura,
+            );
+            contexto.drawImage(
+                sprites,
+                chao.spriteX, chao.spriteY, 
+                chao.largura, chao.altura,
+                chao.x+chao.largura, chao.y,
+                chao.largura, chao.altura,
+            );
+        }
+}
 
 const inicio = {
     spriteX: 130,
@@ -68,7 +98,6 @@ const inicio = {
             );
         }
 }
-
 const TelaInicio = {
     desenha(){
         fundo.desenha();
@@ -80,6 +109,12 @@ const TelaInicio = {
         telaAtiva = TelaJogo;
     }
 }
+
+var telaAtiva = TelaInicio;
+function mudaTelaAtiva(){
+    telaAtiva.click();
+}
+
 const TelaJogo = {
     desenha(){
         fundo.desenha();
@@ -90,12 +125,7 @@ const TelaJogo = {
     click(){}
 }
 
-var telaAtiva = TelaInicio;
-function mudaTelaAtiva(){
-    telaAtiva.click();
-}
 window.addEventListener("click", mudaTelaAtiva)
-
 function loop(){
     telaAtiva.desenha()
     requestAnimationFrame(loop);
